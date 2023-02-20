@@ -20,8 +20,9 @@ const logEvents = async(message, fileName) => {
 
 const logger = async(req, res, next) => {
     const date = `[${format(new Date(), 'dd/MM/yyyy:HH:mm:ss')}]`
+    const day = `${format(new Date(), 'dd-MM-yyyy')}`
     const message = `${req.ip} -- ${date} ${req.method}\t${req.path}\t${req.headers.origin}   ${req.header('user-agent')}\n`
-    await logEvents(message, 'reqLog.log')
+    await logEvents(message, `${day}.log`)
     next()
 }
 

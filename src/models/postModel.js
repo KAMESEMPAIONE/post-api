@@ -31,12 +31,13 @@ const PostSchema = new mongoose.Schema({
                 type: Date,
                 default: Date.now
             }
-        }]
+        }],
+        default : []
     }
 }, {timestamps: true})
 
 PostSchema.plugin(AutoIncrement, {
-    inc_field: 'postNumber',
+    inc_field: 'postId',
     id: 'postId'
 })
 

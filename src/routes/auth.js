@@ -4,7 +4,6 @@ const loginLimitter = require('../middleware/loginLimitter')
 const {updateCredentialsCheck} = require('../middleware/validator')
 const verifyJWT = require('../middleware/verifyJWT')
 
-
 const router = new express.Router()
 
 router.post('/', loginLimitter, authController.login)

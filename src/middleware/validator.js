@@ -34,6 +34,7 @@ const updateCredentialsCheck = [
         .isLength({max:32}).withMessage('Password is to long!')
 ]
 
+
 module.exports = {
     registerCheck,
     updateCredentialsCheck

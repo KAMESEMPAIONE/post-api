@@ -8,7 +8,7 @@ const corsOptions = require('./config/corsOptions')
 const connectDB = require('./config/connectDB')
 const {logger} = require('./middleware/logger')
 
-const app = express();
+const app = express()
 const PORT = process.env.PORT || 8080
 
 connectDB()
@@ -17,7 +17,7 @@ app.use(logger)
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
-app.use( express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', require('./routes/root'))
 app.use('/register', require('./routes/register'))
@@ -35,7 +35,7 @@ app.use((err, req, res, next) => {
 })
 
 mongoose.connection.once('open', () => {
-    console.log('Connected to MondoDB!')
+    console.log('Connected to MongoDB!')
     app.listen(PORT, () => console.log(`Server running on port ${PORT}!`))
 })
 
