@@ -10,7 +10,7 @@ const getAllPosts = async (req, res) => {
     res.json(posts)
 }
 
-// @desc Get posts bu author
+// @desc Get posts by author
 // @route GET /posts/my-posts
 // @access Private
 const getPostsByAuthor = async (req, res) => {
@@ -41,10 +41,12 @@ const createPost = async (req, res) => {
     const {title, body} = req.body
     if(!title || !body) return res.status(400).json({message: 'All fields required!'})
     const author = req.userId
+    const authorName = req.user
 
     try {
         await Post.create({
             author,
+            authorName,
             title,
             body
         })
@@ -89,6 +91,7 @@ const deletePost = async (req, res) => {
     const userId = req.userId
     const roles = req.roles
     const postId = req.params.postId
+    
     if(!postId) return res.status(400).json({message: 'Post ID required.'})
 
     const foundPost = await Post.findOne({postId}).exec()
@@ -112,6 +115,8 @@ const deletePost = async (req, res) => {
 // @access Private
 const addComment = async (req, res) => {
     const userId = req.userId
+    const authorName = req.user
+
     const postId = req.params.postId
     if(!postId) return res.status(400).json({message: 'Post ID required.'})
 
@@ -124,6 +129,7 @@ const addComment = async (req, res) => {
     try {
         foundPost.comments.push({
             author: userId,
+            authorName,
             body
         })
 

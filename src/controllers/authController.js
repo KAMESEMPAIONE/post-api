@@ -1,7 +1,7 @@
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const {validationResult} = require('express-validator')
+const { validationResult } = require('express-validator')
 
 // @desc Login
 // @route POST /auth
@@ -50,7 +50,7 @@ const login = async (req, res) => {
     foundUser.refreshToken = [...refreshTokenArr, newRefreshToken]
     await foundUser.save()
 
-    res.cookie('jwt', newRefreshToken, {httpOnly:true, maxAge:5 * 60 * 1000})
+    res.cookie('jwt', newRefreshToken, {httpOnly:true, maxAge: 15 * 60 * 1000})
     res.json({accessToken})
 }
 
@@ -132,7 +132,6 @@ const refreshToken = async (req, res) => {
     if(!foundUser) {
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,
             async (err, decoded) => {
-   
                 if(err) return res.sendStatus(403)
 
                 const hackedUser = await User.findOne({username: decoded.username}).exec()
@@ -153,9 +152,8 @@ const refreshToken = async (req, res) => {
             if(err) {
                 foundUser.refreshToken = [...refreshTokenArr]
                 await foundUser.save()
-    
             }
-            if(foundUser._id.toString() !== decoded.id) return res.sendStatus(403)
+            if(err || foundUser._id.toString() !== decoded.id) return res.sendStatus(403)
 
             const accessToken = jwt.sign(
                 {id: foundUser._id, username: foundUser.username, roles: foundUser.roles},
@@ -169,7 +167,7 @@ const refreshToken = async (req, res) => {
                 {expiresIn: '15m'}
             )
 
-            foundUser.refreshToken = [...refreshToken, newRefreshToken]
+            foundUser.refreshToken = [...refreshTokenArr, newRefreshToken]
             await foundUser.save()
             
             res.cookie('jwt', newRefreshToken,{ httpOnly: true, maxAge: 15 * 60 * 1000 })

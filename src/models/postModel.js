@@ -8,14 +8,23 @@ const PostSchema = new mongoose.Schema({
         required: true
     },
 
-    title: {
+    authorName: {
         type: String,
         required: true
     },
 
+    title: {
+        type: String,
+        required: true,
+        minLength: 4,
+        maxLength: 96
+    },
+
     body: {
         type: String,
-        required: true
+        required: true,
+        minLength: 12,
+        maxLength: 16256
     },
 
     comments: {
@@ -25,6 +34,11 @@ const PostSchema = new mongoose.Schema({
                 ref: 'User',
             },
 
+            authorName: {
+                type: String,
+                required: true
+            },
+            
             body: String,
 
             date: {

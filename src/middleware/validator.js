@@ -4,7 +4,7 @@ const registerCheck = [
     check('username')
         .trim()
         .isLength({min:3}).withMessage('Username is to short!')
-        .isLength({max:32}).withMessage('Username is to long!')
+        .isLength({max:24}).withMessage('Username is to long!')
         .escape(),
 
     check('email')

@@ -7,7 +7,7 @@ const verifyJWT = require('../middleware/verifyJWT')
 const router = new express.Router()
 
 router.post('/', loginLimitter, authController.login)
-router.get('/logout', authController.logout)
+router.post('/logout', authController.logout)
 router.get('/refresh', authController.refreshToken)
 router.patch('/update', verifyJWT, updateCredentialsCheck, authController.updateCredentials)
 
