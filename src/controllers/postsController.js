@@ -75,6 +75,7 @@ const updatePost = async (req, res) => {
     try {
         if(title) foundPost.title = title
         if(body) foundPost.body = body
+        foundPost.updatedAt = new Date()
 
         await foundPost.save()
         res.json({ message: 'Success data changed'})
@@ -161,6 +162,8 @@ const updateComment = async (req, res) => {
         if(foundComment.author.toString() !== userId) return res.status(401).json({message: 'You have no access to update this comment!'})
 
         foundComment.body = body
+        foundComment.updatedAt = new Date()
+        
         await foundPost.save()
         res.json({message:'Comment updated!'})
     } catch(err) {

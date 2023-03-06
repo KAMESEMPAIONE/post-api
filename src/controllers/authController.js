@@ -21,13 +21,13 @@ const login = async (req, res) => {
     const accessToken = jwt.sign(
         {id: foundUser._id, username, roles: foundUser.roles},
         process.env.ACCESS_TOKEN_SECRET,
-        {expiresIn: '5m'}
+        {expiresIn: '15m'}
     )
         
     const newRefreshToken = jwt.sign(
         {id: foundUser._id},
         process.env.REFRESH_TOKEN_SECRET,
-        {expiresIn: '15m'}
+        {expiresIn: '1d'}
     )
 
     let refreshTokenArr = 
@@ -50,7 +50,7 @@ const login = async (req, res) => {
     foundUser.refreshToken = [...refreshTokenArr, newRefreshToken]
     await foundUser.save()
 
-    res.cookie('jwt', newRefreshToken, {httpOnly:true, maxAge: 15 * 60 * 1000})
+    res.cookie('jwt', newRefreshToken, {httpOnly:true, maxAge: 24 * 60 * 60 * 1000})
     res.json({accessToken})
 }
 
@@ -158,19 +158,19 @@ const refreshToken = async (req, res) => {
             const accessToken = jwt.sign(
                 {id: foundUser._id, username: foundUser.username, roles: foundUser.roles},
                 process.env.ACCESS_TOKEN_SECRET,
-                {expiresIn: '5m'}
+                {expiresIn: '15m'}
             )
                 
             const newRefreshToken = jwt.sign(
                 {id: foundUser._id},
                 process.env.REFRESH_TOKEN_SECRET,
-                {expiresIn: '15m'}
+                {expiresIn: '1d'}
             )
 
             foundUser.refreshToken = [...refreshTokenArr, newRefreshToken]
             await foundUser.save()
             
-            res.cookie('jwt', newRefreshToken,{ httpOnly: true, maxAge: 15 * 60 * 1000 })
+            res.cookie('jwt', newRefreshToken,{ httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
             res.json({accessToken})
         }
     )

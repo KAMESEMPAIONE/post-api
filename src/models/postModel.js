@@ -27,6 +27,16 @@ const PostSchema = new mongoose.Schema({
         maxLength: 16256
     },
 
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    },
+
     comments: {
         type: [{
             author: {
@@ -39,16 +49,24 @@ const PostSchema = new mongoose.Schema({
                 required: true
             },
             
-            body: String,
+            body: {
+               type: String,
+               maxlength: 512
+            },
 
-            date: {
+            createdAt: {
+                type: Date,
+                default: Date.now
+            },
+        
+            updatedAt: {
                 type: Date,
                 default: Date.now
             }
         }],
         default : []
     }
-}, {timestamps: true})
+})
 
 PostSchema.plugin(AutoIncrement, {
     inc_field: 'postId',

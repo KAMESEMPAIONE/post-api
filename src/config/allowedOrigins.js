@@ -1,7 +1,5 @@
 const allowedOrigins = [
-    'http://localhost:3000',
-    'https://www.google.com',
-    'http://192.168.0.113:3000'
+    "https://posts-0l5c.onrender.com/login"
 ]
 
 module.exports = allowedOrigins
