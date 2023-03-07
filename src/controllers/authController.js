@@ -43,14 +43,14 @@ const login = async (req, res) => {
             refreshTokenArr = []
         }
 
-        res.clearCookie('jwt', {httpOnly:true})
+        res.clearCookie('jwt',  {httpOnly:true, secure: true, sameSite: 'None'})
     }
        
 
     foundUser.refreshToken = [...refreshTokenArr, newRefreshToken]
     await foundUser.save()
 
-    res.cookie('jwt', newRefreshToken, {httpOnly:true, maxAge: 24 * 60 * 60 * 1000})
+    res.cookie('jwt', newRefreshToken, {httpOnly:true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000})
     res.json({accessToken})
 }
 
@@ -62,7 +62,7 @@ const logout = async (req, res) => {
     if (!cookies?.jwt) return res.sendStatus(204)
 
     const refreshToken = cookies.jwt
-    res.clearCookie('jwt', { httpOnly: true})
+    res.clearCookie('jwt',  {httpOnly:true, secure: true, sameSite: 'None'})
 
     const foundUser = await User.findOne({ refreshToken }).exec()
     if (!foundUser) return res.sendStatus(204)
@@ -126,7 +126,7 @@ const refreshToken = async (req, res) => {
     const cookies = req.cookies
     if (!cookies?.jwt) return res.sendStatus(204)
     const refreshToken = cookies.jwt
-    res.clearCookie('jwt', { httpOnly: true })
+    res.clearCookie('jwt',  {httpOnly:true, secure: true, sameSite: 'None'})
    
     const foundUser = await User.findOne({refreshToken}).exec()
     if(!foundUser) {
@@ -170,7 +170,7 @@ const refreshToken = async (req, res) => {
             foundUser.refreshToken = [...refreshTokenArr, newRefreshToken]
             await foundUser.save()
             
-            res.cookie('jwt', newRefreshToken,{ httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
+            res.cookie('jwt', newRefreshToken, {httpOnly:true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000})
             res.json({accessToken})
         }
     )
