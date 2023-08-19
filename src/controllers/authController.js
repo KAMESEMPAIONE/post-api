@@ -18,6 +18,11 @@ const login = async (req, res) => {
     
     if(!match) return res.sendStatus(401)
     
+    if(foundUser.refreshToken.length > 5) {
+        foundUser.refreshToken = []
+        await foundUser.save()
+    }
+
     const accessToken = jwt.sign(
         {id: foundUser._id, username, roles: foundUser.roles},
         process.env.ACCESS_TOKEN_SECRET,
@@ -133,8 +138,8 @@ const refreshToken = async (req, res) => {
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,
             async (err, decoded) => {
                 if(err) return res.sendStatus(403)
-
-                const hackedUser = await User.findOne({username: decoded.username}).exec()
+            
+                const hackedUser = await User.findById(decoded.id).exec()
                 if(hackedUser) {
                     hackedUser.refreshToken = []
                     await hackedUser.save()
