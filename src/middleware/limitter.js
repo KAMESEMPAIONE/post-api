@@ -6,4 +6,12 @@ const loginLimitter = rateLimit({
     message: {message: 'Too many attempts, try again after 60 seconds!'}
 })
 
-module.exports = loginLimitter
+const registerLimitter = rateLimit({
+    windowsMs: 5 * 60 * 1000,
+    max: 3
+})
+
+module.exports =  {
+    loginLimitter,
+    registerLimitter
+}
