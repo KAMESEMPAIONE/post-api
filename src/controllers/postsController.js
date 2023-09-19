@@ -1,5 +1,9 @@
-const Post = require('../models/postModel');
+const Post = require('../models/postModel')
+const createDOMPurify = require('dompurify')
+const { JSDOM } = require('jsdom')
 
+const window = new JSDOM('').window
+const DOMPurify = createDOMPurify(window)
 
 // @desc Get all posts
 // @route GET /posts
@@ -42,13 +46,14 @@ const createPost = async (req, res) => {
     if(!title || !body) return res.status(400).json({message: 'All fields required!'})
     const author = req.userId
     const authorName = req.user
+    const sanitizedBody = DOMPurify.sanitize(body)
 
     try {
         await Post.create({
             author,
             authorName,
             title,
-            body
+            body: sanitizedBody
         })
 
         res.status(201).json({message: 'Post created!'})
@@ -70,11 +75,13 @@ const updatePost = async (req, res) => {
 
     const foundPost = await Post.findOne({postId}).exec()
     if(!foundPost) return res.status(204).json({message: 'No posts found'})
-    if(foundPost?.author.toString() !== userId.toString()) return res.status(401).json({message: 'You have not access to edit this post!'})
+    if(foundPost?.author.toString() !== userId.toString()) {
+        return res.status(401).json({message: 'You have not access to edit this post!'})
+    }
 
     try {
         if(title) foundPost.title = title
-        if(body) foundPost.body = body
+        if(body) foundPost.body = DOMPurify.sanitize(body)
         foundPost.updatedAt = new Date()
 
         await foundPost.save()
