@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "homepage": "http://KAMESEMPAIONE.github.io/post-api",
   "scripts": {
     "dev": "nodemon ./src/server",
-    "start": "node ./src/server"
+    "start": "node ./src/server",
+    "predeploy" : "npm run build",
+    "deploy" : "gh-pages -d build"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +29,7 @@
     "mongoose-sequence": "^5.3.1"
   },
   "devDependencies": {
+    "gh-pages": "^6.0.0",
     "nodemon": "^2.0.20"
   }
 }
